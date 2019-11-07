@@ -32,7 +32,8 @@ In addition to the cache, there are also materials for creating instruction trac
         32-bit address
         Column associative structure
         Reports miss rate     
-        
+
+# Results 
 ![extra_credit_1_final](https://user-images.githubusercontent.com/31195314/68355000-ed761c80-00db-11ea-8796-529cd7d737cd.PNG)
 
 
