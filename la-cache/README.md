@@ -1,5 +1,17 @@
+## Welcome to La Cache
+
+La Cache is a simple column associative structure.
+
+In addition to the cache, there are also materials for creating instruction traces/experimenting on work loads with dineroIV 
+
 # Usage: ./cache <trace file>
-  
+
+# Description:
+        8KB instruction cache
+        32B block size
+        32-bit address
+        Column associative structure
+        Reports miss rate     
 # Trace File Format:
     LABEL   = 0       read data               
             = 1       write data               
