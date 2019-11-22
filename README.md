@@ -1,6 +1,6 @@
 # README
 
-Projects that model various computer architectural features. Topics include all aspects of memory, microprocessor, I/O and networking. 
+Projects that model various computer architectural features. Topics include aspects of memory, microprocessor, I/O and networking. 
 
 Projects also emphasize performance analysis.
 
