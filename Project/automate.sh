@@ -2,7 +2,7 @@
 
 # Note: This simulation prints to stderr
 # Array of all benches to run
-allBenches=('cc1' 'anagram' 'compress95' 'go' 'perl')
+allBenches=('compress95' 'go' 'perl') # removed cc1 and anagram
 
 # Set Associativity
 allAssoc=(1 2 4)
@@ -10,6 +10,16 @@ allAssoc=(1 2 4)
 # Iterate through each bench test
 for bench in ${allBenches[@]};
 do
+    if [ $bench = "cc1" ]; then
+        extra='-o /dev/null'                                
+    elif [ $bench = 'compress95' ]; then
+        extra='<simplesim-3.0/benchmarks/compress95.in'     
+    elif [ $bench = 'go' ]; then 
+        extra='50 9 simplesim-3.0/benchmarks/2stone9.in'    
+    elif [ $bench = 'perl' ]; then
+        extra='simplesim-3.0/benchmarks/perl-tests.pl'
+    fi
+
     echo "Benchmark: " $bench
 
     # Title file
@@ -22,7 +32,7 @@ do
     > $file_name
 
     # Place headers
-    { echo "title,cache_size,set_number,block_size,replacement_type,associativity,sim_num_insn,sim_num_refs,il1.accesses,il1.hits,il1.misses,il1.replacements,il1.miss_rate,il1.repl_rate,il2.accesses,il2.hits,il2.replacements,il2.miss_rate,il2.repl_rate,dl1.accesses,dl1.hits,dl1.misses,dl1.replacements,dl1.miss_rate,dl1.repl_rate,dl2.accesses,dl2.hits,dl2.misses,dl2.replacements,dl2.miss_rate,dl2.repl_rate"; } > $file_name
+    { echo "title,cache_size,set_number,block_size,replacement_type,associativity,il1.miss_rate,il1.repl_rate,il2.miss_rate,il2.repl_rate,dl1.miss_rate,dl1.repl_rate,dl2.miss_rate,dl2.repl_rate"; } > $file_name
         
     for asso in ${allAssoc[@]};
     do
@@ -42,12 +52,9 @@ do
         set_number=1024
         bsize=32
 
-        for i in `seq 1 5`; 
-        do
-            { printf "$title,$cache_size,$set_number,$bsize,$repl,$asso,"; } >> $file_name
-            ./simplesim-3.0/sim-cache -cache:dl1 dl1:$set_number:$bsize:$asso:$repl -cache:dl2 dl2:$set_number:$bsize:$asso:$repl -cache:il1 il1:$set_number:$bsize:$asso:$repl -cache:il2 il2:$set_number:$bsize:$asso:$repl simplesim-3.0/benchmarks/$bench -O simplesim-3.0/benchmarks/1stmt.i 2> >( grep "sim_num_insn\|sim_num_refs\|il1.accesses\|il1.hits\|il1.misses\|il1.replacements\|il1.miss_rate\|il1.repl_rate\|il2.accesses\|il2.hits\|il2.replacements\|il2.miss_rate\|il2.repl_rate\|dl1.accesses\|dl1.hits\|dl1.misses\|dl1.replacements\|dl1.miss_rate\|dl1.repl_rate\|dl2.accesses\|dl2.hits\|dl2.misses\|dl2.replacements\|dl2.miss_rate\|dl2.repl_rate" ) | awk "{print \$2}" | tr '\n' ',' | sed 's/,\?$/\n/' >> $file_name  
-        done    
-
+        { printf "$title,$cache_size,$set_number,$bsize,$repl,$asso,"; } >> $file_name
+        ./simplesim-3.0/sim-cache -cache:dl1 dl1:$set_number:$bsize:$asso:$repl -cache:dl2 dl2:$set_number:$bsize:$asso:$repl -cache:il1 il1:$set_number:$bsize:$asso:$repl -cache:il2 il2:$set_number:$bsize:$asso:$repl simplesim-3.0/benchmarks/$bench $extra 2> >( grep "il1.miss_rate\|il1.repl_rate\|il2.miss_rate\|il2.repl_rate\|dl1.miss_rate\|dl1.repl_rate\|dl2.miss_rate\|dl2.repl_rate" ) | awk "{print \$2}" | tr '\n' ',' | sed 's/,\?$/\n/' >> $file_name
+ 
 
         # Optimization: Larger Cache
         echo " "
@@ -64,7 +71,7 @@ do
             set_number=$(($set_number<<1))
             cache_size=$(($(($set_number/1024))*32));
             { printf "$title,$cache_size,$set_number,$bsize,$repl,$asso,"; } >> $file_name
-            ./simplesim-3.0/sim-cache -cache:dl1 dl1:$set_number:$bsize:$asso:$repl -cache:dl2 dl2:$set_number:$bsize:$asso:$repl -cache:il1 il1:$set_number:$bsize:$asso:$repl -cache:il2 il2:$set_number:$bsize:$asso:$repl simplesim-3.0/benchmarks/$bench -O simplesim-3.0/benchmarks/1stmt.i 2> >( grep "sim_num_insn\|sim_num_refs\|il1.accesses\|il1.hits\|il1.misses\|il1.replacements\|il1.miss_rate\|il1.repl_rate\|il2.accesses\|il2.hits\|il2.replacements\|il2.miss_rate\|il2.repl_rate\|dl1.accesses\|dl1.hits\|dl1.misses\|dl1.replacements\|dl1.miss_rate\|dl1.repl_rate\|dl2.accesses\|dl2.hits\|dl2.misses\|dl2.replacements\|dl2.miss_rate\|dl2.repl_rate" ) | awk "{print \$2}" | tr '\n' ',' | sed 's/,\?$/\n/' >> $file_name  
+            ./simplesim-3.0/sim-cache -cache:dl1 dl1:$set_number:$bsize:$asso:$repl -cache:dl2 dl2:$set_number:$bsize:$asso:$repl -cache:il1 il1:$set_number:$bsize:$asso:$repl -cache:il2 il2:$set_number:$bsize:$asso:$repl simplesim-3.0/benchmarks/$bench $extra 2> >( grep "il1.miss_rate\|il1.repl_rate\|il2.miss_rate\|il2.repl_rate\|dl1.miss_rate\|dl1.repl_rate\|dl2.miss_rate\|dl2.repl_rate" ) | awk "{print \$2}" | tr '\n' ',' | sed 's/,\?$/\n/' >> $file_name
         done
 
 
@@ -84,7 +91,7 @@ do
             set_number=$(($set_number>>1))
             block_size=$(($((32*1024))/$set_number));
             { printf "$title,$cache_size,$set_number,$bsize,$repl,$asso,"; } >> $file_name
-            ./simplesim-3.0/sim-cache -cache:dl1 dl1:$set_number:$bsize:$asso:$repl -cache:dl2 dl2:$set_number:$bsize:$asso:$repl -cache:il1 il1:$set_number:$bsize:$asso:$repl -cache:il2 il2:$set_number:$bsize:$asso:$repl simplesim-3.0/benchmarks/$bench -O simplesim-3.0/benchmarks/1stmt.i 2> >( grep "sim_num_insn\|sim_num_refs\|il1.accesses\|il1.hits\|il1.misses\|il1.replacements\|il1.miss_rate\|il1.repl_rate\|il2.accesses\|il2.hits\|il2.replacements\|il2.miss_rate\|il2.repl_rate\|dl1.accesses\|dl1.hits\|dl1.misses\|dl1.replacements\|dl1.miss_rate\|dl1.repl_rate\|dl2.accesses\|dl2.hits\|dl2.misses\|dl2.replacements\|dl2.miss_rate\|dl2.repl_rate" ) | awk "{print \$2}" | tr '\n' ',' | sed 's/,\?$/\n/' >> $file_name  
+            ./simplesim-3.0/sim-cache -cache:dl1 dl1:$set_number:$bsize:$asso:$repl -cache:dl2 dl2:$set_number:$bsize:$asso:$repl -cache:il1 il1:$set_number:$bsize:$asso:$repl -cache:il2 il2:$set_number:$bsize:$asso:$repl simplesim-3.0/benchmarks/$bench $extra 2> >( grep "il1.miss_rate\|il1.repl_rate\|il2.miss_rate\|il2.repl_rate\|dl1.miss_rate\|dl1.repl_rate\|dl2.miss_rate\|dl2.repl_rate" ) | awk "{print \$2}" | tr '\n' ',' | sed 's/,\?$/\n/' >> $file_name
         done
 
 
@@ -103,11 +110,8 @@ do
         set_number=1024
         bsize=32
 
-        for i in `seq 1 5`; 
-        do
-            { printf "$title,$cache_size,$set_number,$bsize,$repl,$asso,"; } >> $file_name
-            ./simplesim-3.0/sim-cache -cache:dl1 dl1:$set_number:$bsize:$asso:$repl -cache:dl2 dl2:$set_number:$bsize:$asso:$repl -cache:il1 il1:$set_number:$bsize:$asso:$repl -cache:il2 il2:$set_number:$bsize:$asso:$repl simplesim-3.0/benchmarks/$bench -O simplesim-3.0/benchmarks/1stmt.i 2> >( grep "sim_num_insn\|sim_num_refs\|il1.accesses\|il1.hits\|il1.misses\|il1.replacements\|il1.miss_rate\|il1.repl_rate\|il2.accesses\|il2.hits\|il2.replacements\|il2.miss_rate\|il2.repl_rate\|dl1.accesses\|dl1.hits\|dl1.misses\|dl1.replacements\|dl1.miss_rate\|dl1.repl_rate\|dl2.accesses\|dl2.hits\|dl2.misses\|dl2.replacements\|dl2.miss_rate\|dl2.repl_rate" ) | awk "{print \$2}" | tr '\n' ',' | sed 's/,\?$/\n/' >> $file_name  
-        done
+        { printf "$title,$cache_size,$set_number,$bsize,$repl,$asso,"; } >> $file_name
+        ./simplesim-3.0/sim-cache -cache:dl1 dl1:$set_number:$bsize:$asso:$repl -cache:dl2 dl2:$set_number:$bsize:$asso:$repl -cache:il1 il1:$set_number:$bsize:$asso:$repl -cache:il2 il2:$set_number:$bsize:$asso:$repl simplesim-3.0/benchmarks/$bench $extra 2> >( grep "il1.miss_rate\|il1.repl_rate\|il2.miss_rate\|il2.repl_rate\|dl1.miss_rate\|dl1.repl_rate\|dl2.miss_rate\|dl2.repl_rate" ) | awk "{print \$2}" | tr '\n' ',' | sed 's/,\?$/\n/' >> $file_name
 
 
         # Replacement Algorithm Optimization
@@ -125,11 +129,8 @@ do
         set_number=1024
         bsize=32
 
-        for i in `seq 1 5`; 
-        do
-            { printf "$title,$cache_size,$set_number,$bsize,$repl,$asso,"; } >> $file_name
-            ./simplesim-3.0/sim-cache -cache:dl1 dl1:$set_number:$bsize:$asso:$repl -cache:dl2 dl2:$set_number:$bsize:$asso:$repl -cache:il1 il1:$set_number:$bsize:$asso:$repl -cache:il2 il2:$set_number:$bsize:$asso:$repl simplesim-3.0/benchmarks/$bench -O simplesim-3.0/benchmarks/1stmt.i 2> >( grep "sim_num_insn\|sim_num_refs\|il1.accesses\|il1.hits\|il1.misses\|il1.replacements\|il1.miss_rate\|il1.repl_rate\|il2.accesses\|il2.hits\|il2.replacements\|il2.miss_rate\|il2.repl_rate\|dl1.accesses\|dl1.hits\|dl1.misses\|dl1.replacements\|dl1.miss_rate\|dl1.repl_rate\|dl2.accesses\|dl2.hits\|dl2.misses\|dl2.replacements\|dl2.miss_rate\|dl2.repl_rate" ) | awk "{print \$2}" | tr '\n' ',' | sed 's/,\?$/\n/' >> $file_name  
-        done
+        { printf "$title,$cache_size,$set_number,$bsize,$repl,$asso,"; } >> $file_name
+        ./simplesim-3.0/sim-cache -cache:dl1 dl1:$set_number:$bsize:$asso:$repl -cache:dl2 dl2:$set_number:$bsize:$asso:$repl -cache:il1 il1:$set_number:$bsize:$asso:$repl -cache:il2 il2:$set_number:$bsize:$asso:$repl simplesim-3.0/benchmarks/$bench $extra 2> >( grep "il1.miss_rate\|il1.repl_rate\|il2.miss_rate\|il2.repl_rate\|dl1.miss_rate\|dl1.repl_rate\|dl2.miss_rate\|dl2.repl_rate" ) | awk "{print \$2}" | tr '\n' ',' | sed 's/,\?$/\n/' >> $file_name
     done
 done
 
