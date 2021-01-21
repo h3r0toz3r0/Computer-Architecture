@@ -1,0 +1,41 @@
+Progress Report
+
+Work completed:
+    Meetings together--
+    16 total commits
+        Wednesday 30 September 1300 - 1500 
+            Before this meeting we both individually read the prompt for PA1
+            During this meeting we made 4 commits...
+                First, we created readline() and began integrating the readline() with the read(). We could not get this to work or integrate.
+                Next, we realized we needed to utilize syscall() function from the given sysdefs.h file. There was no output to screen.
+                After that, we added comments to the code on areas we thought might be incorrent and suggestions for work to be done.
+                Finally, we started looking at gdb and debugging. We realized that our system calls were jumping due to errors. No errors were printing out though, just exiting our program.
+            Homework from this session was to become more familiar with gdb.
+        Saturday 3 October 0900 - 1100
+            Before this meeting we both individually read up on syscalls and how to call them in c, and learned more about gdb.
+            During this meeting we made 7 commits...
+                First, we decided to scrap our part 1 work from before. We started with a simple "hello" string. We orgranized out funtions as main() held the "hello" string. The main() function called print(). The print function then called write().
+                Second, we weren't able to get it work in the last commit. So we found out the syscall for write requires 4 not 3 variables. We added syscall(1, 1, ptr, len) this time. We were able to print "h" in our "hello" string this time.
+                Third, we wrote a loop to loop through all bytes individually in the print(). This now reads byte by byte of the string and sends it to the write(). Both functions now work correctly. We are able to pass print() a input[] and we see that array print to the screen.
+                Fourth, we re-added the readline() and read() functions. We were able to get readline() to call read() and our terminal asked for user input. However, only the first letter was being printed after the array was passed back to the main() and then to the print() function.
+                Finally, the remaining commits attempted to figure out how to fix the above issue. At first, we got all the functions to work together. But we still produced a warning in the terminal at compile time. Additionally, this method allowed us to type pass the buffer allowance. While only the letters within the buffer printed, we could still type whatever. The second issue we see is that if we give input less then the buffer, we can't terminate user input with a \n. 
+                The next attempt at these issues took away the compile time warning. But now we cannot print back any user input.
+            Homework from this session was to complete the progress report, and get the readline() function to work to specifications. 
+        Sunday 4 October Independent Work Time:
+            4 commits.
+            The first commit I fixed the errors we saw before. Now the program properly places user input into a array that is then printed without warnings.
+            Next, the commit updated so that the string[] empties after each print statement. It also prints the input[] after each \n character. 
+            Last commit, includes logic of part 1; finally completeling part 1. Next we must test part 1.
+
+Plans to finish:
+    Part 1 is done. Next we need to complete part 2 and 3.
+
+    We will meet a minimum of 4 times before 15 October. Our tenative schedule is below:
+        October 5 1000 - 1200
+        October 7 1300 - 1500
+        October 9 1000 - 1200
+        October 10 0900 - 1100
+        October 12 1000 - 1200
+        October 14 1300 - 1500
+    We will supplement our meetings with individual work on the project as well to ensure we finish on time.
+    We plan to finish part 1 by Monday 5 October; part 2 by Friday 9 October; part 3 by 12 October; and then work on testing, code quality, etc on 13-14 October.
