@@ -1,0 +1,35 @@
+**** Master branch doesn't compile, had to remove first 2 characters in 1st line of homework.c
+**** lots of return value errors, cause tests to fail early
+
+Running suite(s): fs5600
+31%: Checks: 19, Failures: 13, Errors: 0
+gradetest-2.c:132:P:write_mostly:mkdir_1:0: Passed
+gradetest-2.c:149:P:write_mostly:mkdir_2:0: Passed
+gradetest-2.c:149:P:write_mostly:create_1:0: Passed
+gradetest-2.c:149:P:write_mostly:create_2:0: Passed
+gradetest-2.c:149:P:write_mostly:create_3:0: Passed
+
+**** created a long directory name, couldn't call getattr on it
+gradetest-2.c:350:F:write_mostly:mkdir_fail:0: Assertion 'rv == 0' failed: rv == -2, 0 == 0
+
+****     //-  bad path /a/b/c - b isn't directory (ENOTDIR):
+
+gradetest-2.c:426:F:write_mostly:create_fail:0: Assertion 'rv == -20' failed: rv == 0, -20 == -20
+
+**** //-  bad path /a/b/c - c is directory (EISDIR):
+
+gradetest-2.c:525:F:write_mostly:unlink_fail:0: Assertion 'rv == -21' failed: rv == 0, -21 == -21
+gradetest-2.c:574:F:write_mostly:rmdir_fail:0: Assertion 'rv == -20' failed: rv == -39, -20 == -20
+
+**** you're returning 4141 bytes from a read of a 4091-byte file:
+gradetest-2.c:625:F:write_mostly:write_4091:0: Assertion 'rv == len' failed: rv == 4141, len == 4091
+gradetest-2.c:625:F:write_mostly:write_4096:0: Assertion 'rv == len' failed: rv == 4146, len == 4096
+gradetest-2.c:625:F:write_mostly:write_4200:0: Assertion 'rv == len' failed: rv == 4250, len == 4200
+gradetest-2.c:625:F:write_mostly:write_8190:0: Assertion 'rv == len' failed: rv == 8240, len == 8190
+gradetest-2.c:625:F:write_mostly:write_12300:0: Assertion 'rv == len' failed: rv == 12350, len == 12300
+gradetest-2.c:625:F:write_mostly:overwrite_1:0: Assertion 'rv == len' failed: rv == 4050, len == 4000
+gradetest-2.c:625:F:write_mostly:overwrite_2:0: Assertion 'rv == len' failed: rv == 6050, len == 6000
+gradetest-2.c:625:F:write_mostly:overwrite_3:0: Assertion 'rv == len' failed: rv == 12050, len == 12000
+gradetest-2.c:625:F:write_mostly:cross_eof:0: Assertion 'rv == len' failed: rv == 12050, len == 12000
+gradetest-2.c:149:P:write_mostly:truncate_test:0: Passed
+13 tests failed

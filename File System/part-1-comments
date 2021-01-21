@@ -1,0 +1,36 @@
+Part 1 functionality as of submission deadline:
+ ----------------------------------------------
+
+Part 1 - three tests failing 
+
+62%: Checks: 8, Failures: 3, Errors: 0
+gradetest-1.c:58:P:read_mostly:getattr:0: Passed
+gradetest-1.c:103:P:read_mostly:readdir:0: Passed
+gradetest-1.c:143:F:read_mostly:read_big:0: Assertion 'len == cksums[i].size' failed: len == 1256, cksums[i].size == 1000
+gradetest-1.c:192:F:read_mostly:read_little:0: Assertion 'len == cksums[j].size' failed: len == 1256, cksums[j].size == 1000
+gradetest-1.c:222:P:read_mostly:path_errs:0: Passed
+gradetest-1.c:242:F:read_mostly:read_badpath:0: Assertion 'rv == -bad_6[i].err' failed: rv == 100, -bad_6[i].err == -21
+gradetest-1.c:268:P:read_mostly:readdir_badpath:0: Passed
+gradetest-1.c:283:P:read_mostly:test_statvfs:0: Passed
+
+You're reading 1256 bytes out of a 1000-byte file. Not sure how, because your code is long and confusing.
+gradetest-1.c:143:F:read_mostly:read_big:0: Assertion 'len == cksums[i].size' failed: len == 1256, cksums[i].size == 1000
+gradetest-1.c:192:F:read_mostly:read_little:0: Assertion 'len == cksums[j].size' failed: len == 1256, cksums[j].size == 1000
+
+fs_read is happily reading 100 bytes from /dir2, instead of returning -EISDIR:
+gradetest-1.c:242:F:read_mostly:read_badpath:0: Assertion 'rv == -bad_6[i].err' failed: rv == 100, -bad_6[i].err == -21
+
+Retest Thursday 12/17
+ --------------------
+Part 1 retest - significant improvements
+
+87%: Checks: 8, Failures: 1, Errors: 0
+gradetest-1.c:58:P:read_mostly:getattr:0: Passed
+gradetest-1.c:103:P:read_mostly:readdir:0: Passed
+gradetest-1.c:145:P:read_mostly:read_big:0: Passed
+gradetest-1.c:194:P:read_mostly:read_little:0: Passed
+gradetest-1.c:222:P:read_mostly:path_errs:0: Passed
+gradetest-1.c:242:F:read_mostly:read_badpath:0: Assertion 'rv == -bad_6[i].err' failed: rv == 100, -bad_6[i].err == -21
+gradetest-1.c:268:P:read_mostly:readdir_badpath:0: Passed
+gradetest-1.c:283:P:read_mostly:test_statvfs:0: Passed
+

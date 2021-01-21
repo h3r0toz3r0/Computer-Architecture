@@ -1,0 +1,31 @@
+Progress Report
+
+Work completed:
+    Meetings together--
+    6 total commits
+        Monday 23 November 1400 - 1600
+            Before this meeting we both individually read the prompt for PA2
+            During this meeting, we made 1 commit...
+                First we completed init() function.
+                Second we completed  stats() function.
+        Wednesday 25 November 1100 - 1300:
+            During this meeting, we made 2 commits...
+                First we completed getattr() function.
+                Second we started readdir() function.
+                Third we wrote the progress.txt
+        Saturday 28 November 1330 - 1530
+            During this meeting, we made 3 commits...
+                First, we got our first unittest working for getattr.
+                Additionally, we started fixing errors we had in the getattr function. Not finished yet.
+                Lastly, we updated the progress.txt
+
+Plans to finish:
+    We will meet a minimum of 3 more times before 16 November. Our schedule is below:
+        November 28     1:30 - 3:30pm
+        November 30     1:30 - 3:30pm 
+        December 2      11:15am - 1:15pm  
+    We will supplement our meetings with indiviual work on the project as well to ensure we finish on time.
+    We plan to start testing after our meeting November 13th to ensure we have time to fix errors before the due date. 
+
+Our next steps:
+    Complete readir(), fix getattr() and separate our split/translate code into individual functions.
