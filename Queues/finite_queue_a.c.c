@@ -1,6 +1,9 @@
 /*    Finite Queue C-Program
  *    Author: Anna DeVries
  *    Date: 3 Mar 2021
+ *
+ *    Useage: gcc -c rng.c
+ *            gcc -lm <file>.c rng.o -o <file> && ./<file>
  * 
  *    Description:  creates a finite queue (capacity determined at compile time)
  *                  tasks arrive with an exponential(2.0) distribution
